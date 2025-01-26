@@ -27,7 +27,27 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      
-      # Étape 5 : Exécuter le script Python
+      # Étape 4 : Exécuter le script Python
       - name: Run script
         run: python scripts/test.py
+
+      # Option 1 : Archiver le fichier généré
+      - name: Upload generated file as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: cleaned-dataset
+          path: data/Cleaned_Youtube_Channels_Dataset.csv
+
+      # Option 2 : Ajouter et pousser les changements
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push changes
+        run: |
+          git add data/Cleaned_Youtube_Channels_Dataset.csv
+          git commit -m "Add cleaned dataset"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
