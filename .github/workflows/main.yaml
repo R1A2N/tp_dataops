@@ -27,38 +27,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Étape 4 : Exécuter le script Python
-      - name: Run script
+      # Étape 4 : Exécuter les scripts Python
+      - name: Run cleaning script
         run: python scripts/test.py
 
-      # Option 1 : Archiver le fichier généré
-      - name: Upload generated file as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: cleaned-dataset
-          path: data/Cleaned_Youtube_Channels_Dataset.csv
-
-      # Option 2 : Ajouter et pousser les changements
-      - name: Configure Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Commit and push changes
-        run: |
-          git add data/Cleaned_Youtube_Channels_Dataset.csv
-          git commit -m "Add cleaned dataset"
-          git push
-      - name: Run script
+      - name: Run visualization script
         run: python scripts/visuel.py
-        
-      - name: Upload generated file as artifact
+
+      # Étape 5 : Archiver les fichiers générés
+      - name: Upload generated files as artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: cleaned-dataset
-          path: data/Top_Countries_Subscribers.pdf
+          name: generated-files
+          path: |
+            data/Cleaned_Youtube_Channels_Dataset.csv
+            data/Top_Countries_Subscribers.pdf
 
-      # Option 2 : Ajouter et pousser les changements
+      # Étape 6 : Configurer Git et pousser les changements
       - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
@@ -66,11 +51,8 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git add data/Top_Countries_Subscribers.pdf
-          git commit -m "Add cleaned dataset"
+          git add data/Cleaned_Youtube_Channels_Dataset.csv data/Top_Countries_Subscribers.pdf
+          git commit -m "Add cleaned dataset and visualization"
           git push
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-       
