@@ -49,5 +49,28 @@ jobs:
           git add data/Cleaned_Youtube_Channels_Dataset.csv
           git commit -m "Add cleaned dataset"
           git push
+      - name: Run script
+        run: python scripts/visuel.py
+        
+      - name: Upload generated file as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: cleaned-dataset
+          path: data/Top_Countries_Subscribers.pdf
+
+      # Option 2 : Ajouter et pousser les changements
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push changes
+        run: |
+          git add data/Top_Countries_Subscribers.pdf
+          git commit -m "Add cleaned dataset"
+          git push
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+       
